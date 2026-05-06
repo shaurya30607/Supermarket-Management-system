@@ -34,7 +34,6 @@ public class DatabaseManager {
     /**
      * Inserts sample products with correct categories using INSERT IGNORE.
      * Safe to call on every startup — existing rows are never overwritten.
-     * Bug fix: previous seed data incorrectly used "Food" for non-food items
      * (e.g. Yoga Mat, Protein Powder, Notebook). Correct categories are now used.
      */
     private static void seedSampleData() throws SQLException {
