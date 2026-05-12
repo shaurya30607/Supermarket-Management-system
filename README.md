@@ -1,5 +1,5 @@
 # Supermarket-Management-system
-Supermarket Management system using JAVA and MySQL.
+Supermarket Management system using JAVA and MySQL.<br>
 This is a **vibe coded project**.
 
 <h2>Commands to run:</h2>
