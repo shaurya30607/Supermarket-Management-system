@@ -1,8 +1,9 @@
 # Supermarket-Management-system
-Supermarket Management system using JAVA and MySQL.<br>
+Supermarket Management system using JAVA and MySQL.
+This is a **vibe coded project**.
 
-Commands to run: <br>
+<h2>Commands to run:</h2>
 javac -cp ".;mysql-connector-j-8.0.33.jar" DatabaseManager.java FreshMitra.java <br>
-java -cp ".;mysql-connector-j-8.0.33.jar" FreshMitra<br>
+java -cp ".;mysql-connector-j-8.0.33.jar" FreshMitra<br><br>
 
-PS: Before executing make sure to change username and password in "DatabaseManager.java" (Line: 9) according to system MySQL
+Before executing make sure to change username and password in "DatabaseManager.java" (Line: 12) according to system MySQL
