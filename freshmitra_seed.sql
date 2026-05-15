@@ -4,21 +4,21 @@
 --  and the entire application will work exactly as before.
 --
 --  Tables created:
---    products      : 310 products  (IDs 101–180, 301–345, 401–440,
---                                   451–485, 501–565, 601–645)
+--    products      : 325 products  (IDs 101–180, 301–345, 401–440,
+--                                   451–485, 501–565, 601–645, 801–815)
 --    customers     : 25 customers  (IDs 1001–1025)
 --    transactions  : 43 transactions spanning 60 days
 --    txn_items     : line items for every transaction
 --    cashiers      :  9 staff members
 --
 --  Category distribution:
---    Food        : 80  (IDs 101–180)
---    Sports      : 65  (IDs 501–565)
---    Electronics : 45  (IDs 301–345)
---    Stationery  : 45  (IDs 601–645)
---    Clothing    : 40  (IDs 401–440)
---    Beauty      : 35  (IDs 451–485)
---    Total       : 310
+--    Food        : 83  (IDs 101–180, 801–803)
+--    Sports      : 69  (IDs 501–565, 810–813)
+--    Electronics : 47  (IDs 301–345, 804–805)
+--    Stationery  : 47  (IDs 601–645, 814–815)
+--    Clothing    : 42  (IDs 401–440, 806–807)
+--    Beauty      : 37  (IDs 451–485, 808–809)
+--    Total       : 325
 -- ================================================================
 
 -- ----------------------------------------------------------------
@@ -480,6 +480,27 @@ INSERT IGNORE INTO products (product_id, name, category, price, quantity, extra_
 (643, 'Leuchtturm1917 Bullet Journal',  'Stationery', 249.00, 12, 'Use: Planning'),
 (644, 'Post-It Pop-Up Note Refill 90sh','Stationery', 149.00, 20, 'Use: Office'),
 (645, 'Oxford Memo Cube 500 Sheets',    'Stationery',  99.00, 25, 'Use: Office');
+
+-- ----------------------------------------------------------------
+-- SUPPLEMENTAL PRODUCTS (15 products, IDs 801–815)
+-- Moved from DatabaseManager.java startup seed data.
+-- ----------------------------------------------------------------
+INSERT IGNORE INTO products (product_id, name, category, price, quantity, extra_info) VALUES
+(801, 'Basmati Rice 5kg',        'Food',        320.00,    50, 'Expiry: 31/12/2026'),
+(802, 'Whole Wheat Bread',       'Food',         45.00,    30, 'Expiry: 15/04/2026'),
+(803, 'Organic Honey 500g',      'Food',        280.00,    25, 'Expiry: 01/06/2027'),
+(804, 'Samsung 65" 4K TV',       'Electronics', 55000.00,   8, 'Warranty: 24 mo'),
+(805, 'Boat Wireless Earbuds',   'Electronics',  1499.00,  20, 'Warranty: 12 mo'),
+(806, 'Men''s Slim Fit Jeans',   'Clothing',      999.00,  35, 'Size: 32'),
+(807, 'Women''s Kurti',          'Clothing',      649.00,  40, 'Size: M'),
+(808, 'Lakme Lipstick',          'Beauty',        349.00,  60, 'Brand: Lakme'),
+(809, 'Nivea Face Wash',         'Beauty',        199.00,  45, 'Brand: Nivea'),
+(810, 'Cricket Bat (Kashmir)',   'Sports',       1800.00,  12, 'Sport: Cricket'),
+(811, 'Yoga Mat 6mm',            'Sports',        699.00,  18, 'Sport: Yoga'),
+(812, 'Protein Powder 1kg',      'Sports',       1299.00,  15, 'Sport: Fitness'),
+(813, 'Dumbbell Set 10kg',       'Sports',       2200.00,  10, 'Sport: Gym'),
+(814, 'Classmate Notebook 200pg','Stationery',     85.00,  80, 'Use: Writing'),
+(815, 'Stapler with Pins',       'Stationery',    120.00,  30, 'Use: Office');
 
 -- ================================================================
 -- 6. TRANSACTIONS  (43 transactions spanning the past 60 days)
