@@ -26,85 +26,8 @@ public class DatabaseManager {
         conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
         System.out.println("[DB] Connected to MySQL.");
         createTablesIfAbsent();
-        seedSampleData();
         migrateLegacyCashierPasswords();
         backfillTransactionCounts();
-    }
-
-    /**
-     * Inserts sample products with correct categories using INSERT IGNORE.
-     * Safe to call on every startup — existing rows are never overwritten.
-     * (e.g. Yoga Mat, Protein Powder, Notebook). Correct categories are now used.
-     */
-    private static void seedSampleData() throws SQLException {
-        String sql = "INSERT IGNORE INTO products (product_id, name, category, price, quantity, extra_info) VALUES (?,?,?,?,?,?)";
-        Object[][] seeds = {
-                // id, name, category, price, qty, extra_info
-                { 801, "Basmati Rice 5kg", "Food", 320.00, 50, "Expiry: 31/12/2026" },
-                { 802, "Whole Wheat Bread", "Food", 45.00, 30, "Expiry: 15/04/2026" },
-                { 803, "Organic Honey 500g", "Food", 280.00, 25, "Expiry: 01/06/2027" },
-                { 804, "Samsung 65\" 4K TV", "Electronics", 55000.00, 8, "Warranty: 24 mo" },
-                { 805, "Boat Wireless Earbuds", "Electronics", 1499.00, 20, "Warranty: 12 mo" },
-                { 806, "Men's Slim Fit Jeans", "Clothing", 999.00, 35, "Size: 32" },
-                { 807, "Women's Kurti", "Clothing", 649.00, 40, "Size: M" },
-                { 808, "Lakme Lipstick", "Beauty", 349.00, 60, "Brand: Lakme" },
-                { 809, "Nivea Face Wash", "Beauty", 199.00, 45, "Brand: Nivea" },
-                { 810, "Cricket Bat (Kashmir)", "Sports", 1800.00, 12, "Sport: Cricket" },
-                { 811, "Yoga Mat 6mm", "Sports", 699.00, 18, "Sport: Yoga" }, // was wrongly "Food"
-                { 812, "Protein Powder 1kg", "Sports", 1299.00, 15, "Sport: Fitness" }, // was wrongly "Food"
-                { 813, "Dumbbell Set 10kg", "Sports", 2200.00, 10, "Sport: Gym" }, // was wrongly "Food"
-                { 814, "Classmate Notebook 200pg", "Stationery", 85.00, 80, "Use: Writing" }, // was wrongly "Food"
-                { 815, "Stapler with Pins", "Stationery", 120.00, 30, "Use: Office" },
-        };
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (Object[] row : seeds) {
-                ps.setInt(1, (int) row[0]);
-                ps.setString(2, (String) row[1]);
-                ps.setString(3, (String) row[2]);
-                ps.setDouble(4, (double) row[3]);
-                ps.setInt(5, (int) row[4]);
-                ps.setString(6, (String) row[5]);
-                ps.addBatch();
-            }
-            ps.executeBatch();
-        }
-        seedCashiers();
-    }
-
-    private static void seedCashiers() throws SQLException {
-        String sql = "INSERT IGNORE INTO cashiers (cashier_id, name, username, shift, status, join_date, password) VALUES (?,?,?,?,?,?,?)";
-        Object[][] cashiers = {
-            {1, "Rahul Sharma",   "rahul",   "Morning",   "Active",   "2023-01-15", "rahul123"},
-            {2, "Priya Mehta",    "priya",   "Afternoon", "Active",   "2023-03-08", "priya123"},
-            {3, "Amit Kumar",     "amit",    "Evening",   "Active",   "2022-11-20", "amit123"},
-            {4, "Sneha Patel",    "sneha",   "Morning",   "Active",   "2023-06-01", "sneha123"},
-            {5, "Vikram Singh",   "vikram",  "Afternoon", "Active",   "2023-07-14", "vikram123"},
-            {6, "Anita Devi",     "anita",   "Evening",   "Inactive", "2022-08-30", "anita123"},
-            {7, "Rohan Gupta",    "rohan",   "Morning",   "Active",   "2024-01-10", "rohan123"},
-            {8, "Kavita Rao",     "kavita",  "Afternoon", "Active",   "2024-02-22", "kavita123"},
-            {9, "Suresh Nair",    "suresh",  "Evening",   "Active",   "2023-09-05", "suresh123"},
-        };
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            for (Object[] row : cashiers) {
-                ps.setInt(1,    (Integer) row[0]);
-                ps.setString(2, (String)  row[1]);
-                ps.setString(3, (String)  row[2]);
-                ps.setString(4, (String)  row[3]);
-                ps.setString(5, (String)  row[4]);
-                ps.setDate(6,   java.sql.Date.valueOf((String) row[5]));
-                ps.setString(7, hashPassword((String) row[6]));
-                ps.addBatch();
-            }
-            ps.executeBatch();
-        }
-        // Assign cashier_ids to transactions that have none (deterministic round-robin)
-        try (Statement st = conn.createStatement()) {
-            st.executeUpdate("""
-                UPDATE transactions
-                SET cashier_id = (ABS(CRC32(txn_id)) % 9) + 1
-                WHERE cashier_id IS NULL
-            """);
-        }
     }
 
     /**
