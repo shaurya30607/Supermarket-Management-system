@@ -3,7 +3,8 @@ Supermarket Management system using JAVA and MySQL.<br>
 <ul>
   <li>This is a complete enterprise system including admin and cashier</li>
   <li>This is a <b>vibe coded project</b>.</li>
-</ul>
+</ul> 
+Author: [Shaurya Jaiswal](https://github.com/shaurya30607)
 
 
 
